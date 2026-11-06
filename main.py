@@ -30,7 +30,10 @@ def go(config: DictConfig):
 
     # Steps to execute
     steps_par = config['main']['steps']
-    active_steps = steps_par.split(",") if steps_par != "all" else _steps
+    if isinstance(steps_par, str):
+        active_steps = [s.strip() for s in steps_par.split(",")] if steps_par != "all" else _steps
+    else:
+        active_steps = list(steps_par) if steps_par != "all" else _steps
 
     # Move to a temporary directory
     with tempfile.TemporaryDirectory() as tmp_dir:
@@ -45,7 +48,7 @@ def go(config: DictConfig):
                     "sample": config["etl"]["sample"],
                     "artifact_name": "sample.csv",
                     "artifact_type": "raw_data",
-                    "artifact_description": "Raw file as downloaded"
+                    "artifact_description": "Raw_file_as_downloaded"
                 },
             )
 
