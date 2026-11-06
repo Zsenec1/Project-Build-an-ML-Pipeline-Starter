@@ -1,0 +1,8 @@
+{
+	"mcpServers": {
+		"Anaconda": {
+			"type": "http",
+			"url": "https://www.anaconda.com/docs/mcp"
+		}
+	}
+}
