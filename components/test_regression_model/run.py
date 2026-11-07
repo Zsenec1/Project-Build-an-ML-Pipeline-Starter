@@ -4,13 +4,11 @@ This step takes the best model, tagged with the "prod" tag, and tests it against
 """
 import argparse
 import logging
+import os
 import wandb
 import mlflow
 import pandas as pd
 from sklearn.metrics import mean_absolute_error
-
-from wandb_utils.log_artifact import log_artifact
-
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)-15s %(message)s")
 logger = logging.getLogger()
@@ -22,12 +20,17 @@ def go(args):
     run.config.update(args)
 
     logger.info("Downloading artifacts")
-    # Download input artifact. This will also log that this script is using this
-    # particular version of the artifact
-    model_local_path = run.use_artifact(args.mlflow_model).download()
+    
+    # Download input artifact safely with a custom root directory
+    model_artifact = run.use_artifact(args.mlflow_model)
+    model_local_path = model_artifact.download(root="./wandb_download_model")
 
-    # Download test dataset
-    test_dataset_path = run.use_artifact(args.test_dataset).file()
+    # Download test dataset safely with a custom root directory
+    test_artifact = run.use_artifact(args.test_dataset)
+    test_download_dir = "./wandb_download_test"
+    test_artifact.download(root=test_download_dir)
+    entry_name = list(test_artifact.manifest.entries.keys())[0]
+    test_dataset_path = os.path.join(test_download_dir, entry_name)
 
     # Read test dataset
     X_test = pd.read_csv(test_dataset_path)
