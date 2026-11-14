@@ -4,8 +4,8 @@ import pandas as pd
 import os
 
 def pytest_addoption(parser):
-    parser.addoption("--csv", action="store", default="clean_sample.csv:latest")
-    parser.addoption("--ref", action="store", default="clean_sample.csv:reference")
+    parser.addoption("--csv", action="store", default="clean_data.csv:latest")
+    parser.addoption("--ref", action="store", default="clean_data.csv:reference")
     parser.addoption("--kl_threshold", action="store", default=0.2, type=float)
     parser.addoption("--min_price", action="store", default=10, type=float)
     parser.addoption("--max_price", action="store", default=350, type=float)
